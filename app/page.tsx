@@ -1,3 +1,13 @@
+import Featured from './components/Featured';
+import Heroshot from './components/Heroshot';
+import Offer from './components/Offer';
+
 export default function Home() {
-    return <main>Hello World</main>;
+    return (
+        <main>
+            <Heroshot />
+            <Featured />
+            <Offer />
+        </main>
+    );
 }
