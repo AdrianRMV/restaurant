@@ -16,3 +16,33 @@
         }
     }
 }
+body {
+    overflow-x: hidden !important;
+}
+
+/* Estilo para el track (parte inactiva) del scrollbar */
+::-webkit-scrollbar {
+    width: 10px; /* Ancho del scrollbar */
+    height: 10px; /* Altura del scrollbar (para scroll horizontal) */
+    background-color: #f5f5f5; /* Color de fondo del track */
+}
+
+/* Estilo para el thumb (parte activa/móvil) del scrollbar */
+::-webkit-scrollbar-thumb {
+    background-color: #929292; /* Color de fondo del thumb */
+    border-radius: 5px; /* Redondeo de bordes del thumb */
+    border: 2px solid #f5f5f5; /* Borde del thumb */
+}
+
+/* Estilo para el thumb en hover (cuando el mouse está encima) */
+::-webkit-scrollbar-thumb:hover {
+    background-color: #555; /* Cambio de color de fondo del thumb en hover */
+}
+
+.swiper-pagination-bullets {
+    bottom: 3px;
+}
+
+.swiper-pagination-bullet-active-main {
+    background-color: rgb(239 68 68) !important;
+}
