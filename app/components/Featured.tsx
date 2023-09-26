@@ -5,11 +5,23 @@ import 'swiper/css/pagination';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination } from 'swiper/modules';
 
-import { featuredProducts } from '../data';
-
 import Image from 'next/image';
+import { ProductType } from '../types/types';
 
-const Featured = () => {
+const getData = async () => {
+    const res = await fetch('http://localhost:3000/api/products', {
+        cache: 'no-store',
+    });
+
+    if (!res.ok) {
+        throw new Error('Fail!');
+    }
+
+    return res.json();
+};
+
+const Featured = async () => {
+    const featuredProducts: ProductType[] = await getData();
     return (
         <Swiper
             pagination={{
