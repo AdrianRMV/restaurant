@@ -9,7 +9,7 @@ const UserLinks = () => {
         <>
             {status === 'authenticated' ? (
                 <>
-                    <Link href="/menu">Orders</Link>
+                    <Link href="/orders">Orders</Link>
                     <span className="cursor-pointer" onClick={() => signOut()}>
                         Logout
                     </span>

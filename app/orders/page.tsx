@@ -1,3 +1,4 @@
+'use client';
 const OrdersPage = () => {
     return (
         <div className="p-4 lg:px-20 xl:p-40">
