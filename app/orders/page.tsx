@@ -1,11 +1,12 @@
 'use client';
 
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { OrderType } from '../types/types';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { useForm } from '../hooks/useForm';
+import { toast } from 'react-toastify';
 
 const OrdersPage = () => {
     // hacer "data:session" es darle un "alias" como lo hacemos con "data AS session"
@@ -17,20 +18,38 @@ const OrdersPage = () => {
         return null;
     }
 
+    const handleUpdate = (e: React.FormEvent<HTMLFormElement>, id: string) => {
+        e.preventDefault();
+        const form = e.target as HTMLFormElement;
+        const input = form.elements[0] as HTMLInputElement;
+        const status = input.value;
+
+        mutation.mutate({ id, status });
+        toast.success('The order status has been changed!');
+    };
+
     const { isLoading, error, data } = useQuery({
         queryKey: ['orders'],
         queryFn: () =>
             fetch('http://localhost:3000/api/orders').then((res) => res.json()),
     });
 
-    const { formState, onInputChange, onResetForm } = useForm({
-        searchText: '',
-    });
-    const { searchText } = formState;
+    const queryClient = useQueryClient();
 
-    const handleUpdate = (e: React.FormEvent<HTMLFormElement>, id: string) => {
-        e.preventDefault();
-    };
+    const mutation = useMutation({
+        mutationFn: ({ id, status }: { id: string; status: string }) => {
+            return fetch(`http://localhost:3000/api/orders/${id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(status),
+            });
+        },
+        onSuccess() {
+            queryClient.invalidateQueries({ queryKey: ['orders'] });
+        },
+    });
 
     if (isLoading || status === 'loading') return 'Loading...';
     if (error) return <p>Error loading orders.</p>;
@@ -51,7 +70,9 @@ const OrdersPage = () => {
                     {data &&
                         data.map((item: OrderType) => (
                             <tr
-                                className="text-sm md:text-base bg-red-50"
+                                className={`text-sm md:text-base ${
+                                    item.status !== 'delivered' && 'bg-red-50'
+                                }`}
                                 key={item.id}
                             >
                                 <td className="hidden md:block py-6 px-1">
@@ -74,16 +95,14 @@ const OrdersPage = () => {
                                         >
                                             <input
                                                 placeholder={item.status}
-                                                onChange={onInputChange}
-                                                value={searchText}
                                                 className="p-2 ring-1 ring-red-100 rounded-md"
                                             />
                                             <button className="bg-red-400 p-2 rounded-full">
                                                 <Image
                                                     src="/edit.png"
+                                                    alt=""
                                                     width={20}
                                                     height={20}
-                                                    alt="Edit Btn"
                                                 />
                                             </button>
                                         </form>
