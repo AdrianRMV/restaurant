@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 
 type Props = {
     price: number;
-    id: number;
+    id: string;
     options?: {
         title: string;
         additionalPrice: number;
@@ -19,32 +19,37 @@ const Price = ({ price, id, options }: Props) => {
     useEffect(() => {
         setTotal(
             quantity *
-                (options ? price + options[selected].additionalPrice : price)
+                (options?.length
+                    ? price + options[selected].additionalPrice
+                    : price)
         );
     }, [quantity, selected, options, price]);
 
     return (
         <div className=" flex flex-col gap-4">
-            <h2 className="text-2xl font-bold">${total.toFixed(2)}</h2>
+            <h2 className="text-2xl font-bold">${total}</h2>
             {/* OPTIONS CONTAINER */}
             <div className="flex gap-4">
-                {options?.map((option, index) => (
-                    <button
-                        key={option.title}
-                        className="min-w-[6rem] p-2 ring-1 ring-red-400 rounded-md"
-                        style={{
-                            background:
-                                selected === index
-                                    ? 'rgb(248 113 113)'
-                                    : 'white',
-                            color:
-                                selected == index ? 'white' : 'rgb(239 68 68)',
-                        }}
-                        onClick={() => setSelected(index)}
-                    >
-                        {option.title}
-                    </button>
-                ))}
+                {options?.length &&
+                    options?.map((option, index) => (
+                        <button
+                            key={option.title}
+                            className="min-w-[6rem] p-2 ring-1 ring-red-400 rounded-md"
+                            style={{
+                                background:
+                                    selected === index
+                                        ? 'rgb(248 113 113)'
+                                        : 'white',
+                                color:
+                                    selected == index
+                                        ? 'white'
+                                        : 'rgb(239 68 68)',
+                            }}
+                            onClick={() => setSelected(index)}
+                        >
+                            {option.title}
+                        </button>
+                    ))}
             </div>
             {/* QUANTITY AND ADD BOTTON CONTAINER */}
             <div className="flex justify-between items-center">

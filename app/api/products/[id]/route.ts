@@ -7,21 +7,19 @@ type Params = {
     };
 };
 
-export const PUT = async (req: NextRequest, { params }: Params) => {
+// GET SINGLE PRODUCT
+export const GET = async (req: NextRequest, { params }: Params) => {
     const { id } = params;
 
     try {
-        const body = await req.json();
-        await prisma.order.update({
+        const product = await prisma.product.findUnique({
             where: {
                 id: id,
             },
-            data: { status: body },
         });
-        return new NextResponse(
-            JSON.stringify({ message: 'ORDERD HAS BEEN UPDATED!' }),
-            { status: 200 }
-        );
+        return new NextResponse(JSON.stringify(product), {
+            status: 200,
+        });
     } catch (error) {
         return new NextResponse(
             JSON.stringify({ message: 'Somenthing went wrong!!' }),
