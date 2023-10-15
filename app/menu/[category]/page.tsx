@@ -46,12 +46,10 @@ const CategoryPage = async ({ params }: Props) => {
                     {/* TEXT CONTAINER */}
                     <div className="flex font-bold items-center justify-between">
                         <h1 className="text-xl uppercase p-2">{item.title}</h1>
-                        <h2 className="group-hover:hidden text-xl">
-                            ${item.price}
-                        </h2>
-                        <button className="uppercase hidden group-hover:block bg-red-500 text-white p-2 rounded-md">
+                        <h2 className="text-xl">${item.price}</h2>
+                        {/* <button className="uppercase hidden group-hover:block bg-red-500 text-white p-2 rounded-md">
                             Add to Cart
-                        </button>
+                        </button> */}
                     </div>
                 </Link>
             ))}
