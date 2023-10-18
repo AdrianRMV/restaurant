@@ -1,16 +1,18 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { StripeElementsOptions, loadStripe } from '@stripe/stripe-js';
-import { Elements } from '@stripe/react-stripe-js';
 import CheckoutForm from '@/app/components/CheckoutForm';
+import { Elements } from '@stripe/react-stripe-js';
+import { StripeElementsOptions, loadStripe } from '@stripe/stripe-js';
+import { useEffect, useState } from 'react';
+
 const stripePromise = loadStripe(
     process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
 );
 
-const page = ({ params }: { params: { id: string } }) => {
-    const { id } = params;
+const PayPage = ({ params }: { params: { id: string } }) => {
     const [clientSecret, setClientSecret] = useState('');
+
+    const { id } = params;
 
     useEffect(() => {
         const makeRequest = async () => {
@@ -23,8 +25,8 @@ const page = ({ params }: { params: { id: string } }) => {
                 );
                 const data = await res.json();
                 setClientSecret(data.clientSecret);
-            } catch (error) {
-                console.log(error);
+            } catch (err) {
+                console.log(err);
             }
         };
 
@@ -39,14 +41,14 @@ const page = ({ params }: { params: { id: string } }) => {
     };
 
     return (
-        <>
+        <div>
             {clientSecret && (
                 <Elements options={options} stripe={stripePromise}>
                     <CheckoutForm />
                 </Elements>
             )}
-        </>
+        </div>
     );
 };
 
-export default page;
+export default PayPage;
